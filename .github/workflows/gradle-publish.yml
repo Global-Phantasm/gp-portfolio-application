@@ -9,7 +9,7 @@ on:
     types: [created]
 
 jobs:
-  build_test_publish:
+  build_test:
     runs-on: ubuntu-latest
     services:
       mongodb:
@@ -39,12 +39,8 @@ jobs:
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
         arguments: build
-    
-    - name: Unit Test
-      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
-      with:
-          arguments: test
   report:
+    needs: build_test
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -73,7 +69,7 @@ jobs:
 
     - name: Make gradlew executable
       run: chmod +x ./gradlew
-                      
+
     - name: Code Coverage
       uses: cicirello/jacoco-badge-generator@v2
       with:
