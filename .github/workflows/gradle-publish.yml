@@ -11,6 +11,10 @@ on:
 jobs:
   build_test_publish:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project:
+          - gp-user-service
     services:
       mongodb:
         image: mongo:4.4.2
@@ -48,20 +52,12 @@ jobs:
     - name: Code Coverage
       uses: cicirello/jacoco-badge-generator@v2
       with:
-        jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
+        jacoco-csv-file: ${{ matrix.project }}/build/reports/jacoco/test/jacocoTestReport.csv
       continue-on-error: true
 
     - name: Save JaCoCo HTML report as artifact
       uses: actions/upload-artifact@v3
       with:
         name: jacoco-html-report
-        path: build/jacocoHtml/**
+        path: ${{ matrix.project }}/build/jacocoHtml/**
       continue-on-error: true
-
-    - name: Publish to GitHub Packages
-      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
-      with:
-        arguments: publish
-      env:
-        USERNAME: ${{ github.actor }}
-        TOKEN: ${{ secrets.GITHUB_TOKEN }}
