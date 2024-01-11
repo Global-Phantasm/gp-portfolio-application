@@ -1,0 +1,30 @@
+plugins {
+	id 'java'
+	id 'maven-publish'
+}
+
+
+group = 'com.gp.pf.application'
+version = '1.0.0-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	
+}
+
+
+
